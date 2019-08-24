@@ -6,7 +6,6 @@
 #   Date    :   19/08/21 14:00:26
 #   Desc    :   
 import numpy as np
-import csv
 
 #obs = np.loadtxt('textobs.csv', delimiter=',')
 obs = np.loadtxt('vehicleObstacle.csv', delimiter=',')
@@ -21,6 +20,7 @@ obs_len = len(obs)
 c = []
 i = 0
 j = 0
+z = 0
 while i < odom_len:
     j = i + 1
     a = [100]
@@ -44,7 +44,8 @@ while i < odom_len:
             g = np.where(obs == obs_element)
             c.append(obs[g[0][0]])
         else:
-            odom_temp = np.delete(odom_temp, i, axis=0)
+            odom_temp = np.delete(odom_temp, i-z, axis=0)
+            z += 1
     else:
         if min(a) <= 0.1:
             obs_element = odom[i][0] - min(a)
@@ -52,16 +53,20 @@ while i < odom_len:
             g = np.where(obs == obs_element)
             c.append(obs[g[0][0]])
         else:
-            odom_temp = np.delete(odom_temp, i, axis=0)
+            odom_temp = np.delete(odom_temp, i-z, axis=0)
+            z += 1
     i += 1
 #    print "i=", i
-
 d = np.array(c)
 e = np.delete(d, 0, axis=1)
+#print e
+#print "===="
 #f = np.concatenate((odom,time_speed), axis=1)
 #print odom.shape
 #print e.shape
+#print odom_temp
 odom_speed = np.concatenate((odom_temp,e),axis=1)
+print odom_speed
+#c = a[np.where(a[:,1]>=150)]
 #np.savetxt('new.csv', f, delimiter = ',', header="timestamp, ub482Odom, ")
-np.savetxt('odom_speed.csv', g, delimiter = ',',header="timestamp, ub482Odom, ub482speed, ObsId, vehicle.x, vehicle.y, speed.x, speed.y, Life, Classification, CameraId")
-
+np.savetxt('odom_speed.csv', odom_speed, delimiter = ',',header="timestamp, ub482Odom, ub482speed, ObsId, vehicle.x, vehicle.y, speed.x, speed.y, Life, Classification, CameraId")
