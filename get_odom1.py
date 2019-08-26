@@ -21,6 +21,7 @@ c = []
 i = 0
 j = 0
 z = 0
+odom_matri_time_diff = []
 while i < odom_len:
     j = i + 1
     a = [100]
@@ -40,6 +41,7 @@ while i < odom_len:
     if min(a) >= abs(max(b)):
         if abs(max(b)) <= 0.1:
             obs_element = odom[i][0] - max(b)
+            odom_matri_time_diff.append(abs(max(b)))
 #        print obs_element
             g = np.where(obs == obs_element)
             c.append(obs[g[0][0]])
@@ -49,6 +51,7 @@ while i < odom_len:
     else:
         if min(a) <= 0.1:
             obs_element = odom[i][0] - min(a)
+            odom_matri_time_diff.append(min(a))
 #        print obs_element
             g = np.where(obs == obs_element)
             c.append(obs[g[0][0]])
@@ -59,6 +62,9 @@ while i < odom_len:
 #    print "i=", i
 d = np.array(c)
 e = np.delete(d, 0, axis=1)
+
+odom_matri_time_diff.sort()
+Arr_odom_matri_time_diff = np.array(odom_matri_time_diff)
 #print e
 #print "===="
 #f = np.concatenate((odom,time_speed), axis=1)
@@ -70,4 +76,5 @@ print odom_speed
 #c = a[np.where(a[:,1]>=150)]
 #b= a[np.where((a[:,0]>0) & (a[:,0]<6))]
 #np.savetxt('new.csv', f, delimiter = ',', header="timestamp, ub482Odom, ")
+np.savetxt('time_diff.csv', Arr_odom_matri_time_diff, delimiter = ',')
 np.savetxt('odom_speed.csv', odom_speed, delimiter = ',',header="timestamp, ub482Odom, ub482speed, ObsId, vehicle.x, vehicle.y, speed.x, speed.y, Life, Classification, CameraId")
