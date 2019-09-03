@@ -30,44 +30,42 @@ while i < odom_len:
             b.append(timestamp_min)
         j += 1
     if min(a) >= abs(max(b)):
-        if abs(max(b)) <= 0.1:
+        if abs(max(b)) <= 0.05:
             obs_element = odom[i][0] - max(b)
             odom_matri_time_diff.append(abs(max(b)))
             g = np.where(obs == obs_element)
-            j = int(g[0])
+#            j = int(g[0])
+#            print j
             c.append(obs[g[0][0]])
         else:
             odom_temp = np.delete(odom_temp, i-z, axis=0)
             z += 1
     else:
-        if min(a) <= 0.1:
+        if min(a) <= 0.05:
             obs_element = odom[i][0] - min(a)
             odom_matri_time_diff.append(min(a))
-#        print obs_element
             g = np.where(obs == obs_element)
-            j = int(g[0])
+#            j = int(g[0])
+#            print j
             c.append(obs[g[0][0]])
         else:
             odom_temp = np.delete(odom_temp, i-z, axis=0)
             z += 1
     i += 1
-#    print "i=", i
 d = np.array(c)
 e = np.delete(d, 0, axis=1)
 
 
 odom_matri_time_diff.sort()
 Arr_odom_matri_time_diff = np.array(odom_matri_time_diff)
-#print e
 #print "===="
 #f = np.concatenate((odom,time_speed), axis=1)
 #print odom.shape
 #print e.shape
-#print odom_temp
 odom_speed = np.concatenate((odom_temp,e),axis=1)
 print odom_speed
 #c = a[np.where(a[:,1]>=150)]
 #b= a[np.where((a[:,0]>0) & (a[:,0]<6))]
 #np.savetxt('new.csv', f, delimiter = ',', header="timestamp, ub482Odom, ")
-np.savetxt('time_diff.csv', Arr_odom_matri_time_diff, delimiter = ',')
-np.savetxt('ped_fisheye1.csv', odom_speed, delimiter = ',',header="timestamp, ub482Odom, ub482speed, Ego_speed, ObsId, vehicle.x, vehicle.y, speed.x, speed.y, Life, Classification, CameraId")
+np.savetxt('fisheye_time_diff.csv', Arr_odom_matri_time_diff, delimiter = ',')
+np.savetxt('ped_fisheye.csv', odom_speed, delimiter = ',',header="timestamp, ub482Odom, ub482speed, Ego_speed, ObsId, vehicle.x, vehicle.y, speed.x, speed.y, Life, Classification, CameraId")
