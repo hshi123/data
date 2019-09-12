@@ -10,18 +10,27 @@ import numpy as np
 obs = np.loadtxt('pedObstacle.csv', delimiter=',')
 odom = np.loadtxt('ub482Odom.csv', delimiter=',')
 odom_temp = odom
-
 odom_len = len(odom)
+odom_ori = abs(odom[odom_len-1][0] - obs[0][0])
 obs_len = len(obs)
+obs_ori = abs(obs[obs_len-1][0] - odom[0][0])
+#print odom_ori
+#print obs_ori
+if odom_ori > obs_ori:
+    ori = odom_ori
+else:
+    ori = obs_ori
 c = []
 i = 0
-j = 0
 z = 0
 odom_matri_time_diff = []
+obs_diff_ori = [0]
 while i < odom_len:
-    j = i + 1
-    a = [10000]
-    b = [-10000]
+    #j = i + 1
+#    print j
+    j = obs_diff_ori[len(obs_diff_ori)-1]
+    a = [ori]
+    b = [-ori]
     while j < obs_len:
         timestamp_min = odom[i][0] - obs[j][0]
         if timestamp_min >= 0:
@@ -34,19 +43,20 @@ while i < odom_len:
             obs_element = odom[i][0] - max(b)
             odom_matri_time_diff.append(abs(max(b)))
             g = np.where(obs == obs_element)
-#            j = int(g[0])
-#            print j
+            obs_diff = int(g[0])
+            obs_diff_ori.append(obs_diff)
             c.append(obs[g[0][0]])
         else:
             odom_temp = np.delete(odom_temp, i-z, axis=0)
             z += 1
     else:
+        print min(a)
         if min(a) <= 0.05:
             obs_element = odom[i][0] - min(a)
             odom_matri_time_diff.append(min(a))
             g = np.where(obs == obs_element)
-#            j = int(g[0])
-#            print j
+            obs_diff = int(g[0])
+            obs_diff_ori.append(obs_diff)
             c.append(obs[g[0][0]])
         else:
             odom_temp = np.delete(odom_temp, i-z, axis=0)
@@ -54,8 +64,6 @@ while i < odom_len:
     i += 1
 d = np.array(c)
 e = np.delete(d, 0, axis=1)
-
-
 odom_matri_time_diff.sort()
 Arr_odom_matri_time_diff = np.array(odom_matri_time_diff)
 #print "===="

@@ -75,5 +75,5 @@ print odom_speed
 #c = a[np.where(a[:,1]>=150)]
 #b= a[np.where((a[:,0]>0) & (a[:,0]<6))]
 #np.savetxt('new.csv', f, delimiter = ',', header="timestamp, ub482Odom, ")
-np.savetxt('pinhole_time_diff.csv', Arr_odom_matri_time_diff, delimiter = ',')
-np.savetxt('ped_pinhole.csv', odom_speed, delimiter = ',',header="timestamp, ub482Odom, ub482speed, Ego_speed, ObsId, vehicle.x, vehicle.y, speed.x, speed.y, Life, Classification, CameraId")
+np.savetxt('fisheye_time_diff.csv', Arr_odom_matri_time_diff, delimiter = ',')
+np.savetxt('ped_fisheye.csv', odom_speed, delimiter = ',',header="timestamp, ub482Odom, ub482speed, Ego_speed, ObsId, vehicle.x, vehicle.y, speed.x, speed.y, Life, Classification, CameraId, Length, Width, Yaw")
