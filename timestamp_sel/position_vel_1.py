@@ -9,7 +9,7 @@
 import numpy as np
 from time import time
 
-def timestamp_com(source='ego_tar_pos_vel.csv', target='matrix_obs_vehicle.csv'):
+def timestamp_com(source='ub482_ego.csv', target='ub482_target.csv'):
     Arr_source = np.loadtxt(source, delimiter=',')
     Arr_target = np.loadtxt(target, delimiter=',')
     Arr_source_len = len(Arr_source)
@@ -87,9 +87,9 @@ def timestamp_com(source='ego_tar_pos_vel.csv', target='matrix_obs_vehicle.csv')
                 else:
                     pass
         elif len(diff_ori) > 1:
-            print diff_ori[-1]+20
-            if diff_ori[-1]+100 < Arr_target_len:
-                timestamp_diff = (m[0] - Arr_target[j][0] for j in xrange(diff_ori[-1],diff_ori[-1]+100))
+            print diff_ori[-1]
+            if diff_ori[-1]+130 < Arr_target_len:
+                timestamp_diff = (m[0] - Arr_target[j][0] for j in xrange(diff_ori[-1],diff_ori[-1]+130))
                 for z in timestamp_diff:
                     if z >= 0:
                         ori_plus.append(z)
@@ -150,8 +150,11 @@ if __name__ == '__main__':
     t = time()
     timestamp_com()
     #print Arr_source_temp
-    np.savetxt('source.csv', np.array(Arr_source_temp), delimiter=',')
-    np.savetxt('target.csv', np.array(ori_list), delimiter=',')
+    #np.savetxt('source.csv', np.array(Arr_source_temp), delimiter=',')
+    #np.savetxt('target.csv', np.array(ori_list), delimiter=',')
+    final_target = np.delete((np.array(ori_list)), 0, axis=1)
+    final_arr = np.concatenate(((np.array(Arr_source_temp)), final_target), axis=1)
+    np.savetxt('position_vel.csv', final_arr, delimiter=',')
     print len(Arr_source_temp)
     #print ori_list
     print len(ori_list)
