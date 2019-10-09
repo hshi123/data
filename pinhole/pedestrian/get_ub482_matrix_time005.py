@@ -50,7 +50,6 @@ while i < odom_len:
             odom_temp = np.delete(odom_temp, i-z, axis=0)
             z += 1
     else:
-        print min(a)
         if min(a) <= 0.05:
             obs_element = odom[i][0] - min(a)
             odom_matri_time_diff.append(min(a))
@@ -62,8 +61,12 @@ while i < odom_len:
             odom_temp = np.delete(odom_temp, i-z, axis=0)
             z += 1
     i += 1
-d = np.array(c)
-e = np.delete(d, 0, axis=1)
+try:
+    d = np.array(c)
+    e = np.delete(d, 0, axis=1)
+except np.AxisError as err:
+    print("Confirm if c is empty")
+    raise
 odom_matri_time_diff.sort()
 Arr_odom_matri_time_diff = np.array(odom_matri_time_diff)
 #print "===="
