@@ -6,9 +6,9 @@
 #   Date    :   19/10/09 19:37:14
 #   Desc    :   
 from time import time
-import my_func
 import os
 import numpy as np
+import my_func
 
 if __name__ == '__main__':
     t = time()

@@ -4,144 +4,44 @@
 #   Author  :   hshi
 #   E-mail  :   snapwings3190@163.com
 #   Date    :   19/09/20 11:21:45
-#   Desc    :   
+#   Desc    :
 
+import os
 import numpy as np
+
+def get_min_abs(x):
+    minabs = abs(x[0][0])
+    global minele,matrix_index
+    minele = x[0][0]
+    matrix_index = x[0][1]
+    for n in xrange(len(x)):
+        if abs(x[n][0]) <= minabs:
+            minabs = abs(x[n][0])
+            minele = x[n][0]
+            matrix_index = x[n][1]
+        return minele,matrix_index
 
 def timestamp_com(source, target):
     Arr_source = np.loadtxt(source, delimiter=',')
     Arr_target = np.loadtxt(target, delimiter=',')
     Arr_source_len = len(Arr_source)
-    Arr_target_len = len(Arr_target)
-    source_ori = abs(Arr_source[Arr_source_len-1][0] - Arr_target[0][0])
-    target_ori = abs(Arr_target[Arr_target_len-1][0] - Arr_source[0][0])
-    if source_ori > target_ori:
-        ori = int(source_ori) + 1
-    else:
-        ori = int(target_ori)+ 1
     global Arr_source_temp,ori_list
     Arr_source_temp = []
     ori_list = []
-    time_diff = []
-    diff_ori = [0]
     temp = (Arr_source[i] for i in xrange(Arr_source_len))
     for m in temp:
-        ori_plus = [ori]
-        ori_minus = [-ori]
-        if len(diff_ori) == 1:
-            timestamp_diff = (m[0] - Arr_target[first_com][0] for first_com in xrange(Arr_target_len))
-            for n in timestamp_diff:
-                if n >= 0:
-                    ori_plus.append(n)
-                else:
-                    ori_minus.append(n)
-            if min(ori_plus) >= abs(max(ori_minus)):
-                if abs(max(ori_minus)) <= 0.05:
-                    target_element = m[0] - max(ori_minus)
-                    #print tar_element
-                    time_diff.append(abs(max(ori_minus)))
-                    target_ori = np.where(Arr_target == target_element)
-                   # print target_ori
-                    if len(target_ori[0]) == 1:
-                        target_ori1 = target_ori[0][0]
-                        diff_ori.append(int(target_ori1))
-                        ori_list.append(Arr_target[target_ori1])
-                        Arr_source_temp.append(m)
-                    elif len(target_ori[0]) > 1:
-                        for k in xrange(len(target_ori)):
-                            target_ori1 = target_ori[0][k]
-                            diff_ori.append(int(target_ori1))
-                            if Arr_target[target_ori1][3] == 1:
-                                ori_list.append(Arr_target[target_ori1])
-                                Arr_source_temp.append(m)
-                            else:
-                                pass
-                    else:
-                        print "Can't find value file target"
-                else:
-                    pass
-            else:
-                if min(ori_plus) <= 0.05:
-                    target_element = m[0] - min(ori_plus)
-                   # print target_element
-                    time_diff.append(min(ori_plus))
-                    target_ori = np.where(Arr_target == target_element)
-                   # print target_ori1
-                    if len(target_ori[0]) == 1:
-                        target_ori1 = target_ori[0][0]
-                        diff_ori.append(int(target_ori1))
-                        ori_list.append(Arr_target[target_ori1])
-                        Arr_source_temp.append(m)
-                    elif len(target_ori[0]) > 1:
-                        for k in xrange(len(target_ori)):
-                            target_ori1 = target_ori[0][k]
-                            diff_ori.append(int(target_ori1))
-                            if Arr_target[target_ori1][3] == 1:
-                                ori_list.append(Arr_target[target_ori1])
-                                Arr_source_temp.append(m)
-                            else:
-                                pass
-                    else:
-                        print "Can't find value from file target"
-                else:
-                    pass
-        elif len(diff_ori) > 1:
-            #print diff_ori[-1]+20
-            if diff_ori[-1]+130 < Arr_target_len:
-                timestamp_diff = (m[0] - Arr_target[j][0] for j in xrange(diff_ori[-1],diff_ori[-1]+130))
-                for z in timestamp_diff:
-                    if z >= 0:
-                        ori_plus.append(z)
-                    else:
-                        ori_minus.append(z)
-                if min(ori_plus) >= abs(max(ori_minus)):
-                    if abs(max(ori_minus)) <= 0.05:
-                        target_element = m[0] - max(ori_minus)
-                        #print target_element
-                        time_diff.append(abs(max(ori_minus)))
-                        target_ori = np.where(Arr_target == target_element)
-                        #print target_ori
-                        if len(target_ori[0]) == 1:
-                            target_ori1 = target_ori[0][0]
-                            diff_ori.append(int(target_ori1))
-                            ori_list.append(Arr_target[target_ori1])
-                            Arr_source_temp.append(m)
-                        elif len(target_ori[0]) > 1:
-                            for k in xrange(len(target_ori)):
-                                target_ori1 = target_ori[0][k]
-                                diff_ori.append(int(target_ori1))
-                                if Arr_target[target_ori1][3] == 1:
-                                    ori_list.append(Arr_target[target_ori1])
-                                    Arr_source_temp.append(m)
-                                else:
-                                    pass
-                        else:
-                            print "Can't find value from file target"
-                    else:
-                        pass
-                else:
-                    if min(ori_plus) <= 0.05:
-                        target_element = m[0] - min(ori_plus)
-                        #print target_element
-                        time_diff.append(min(ori_plus))
-                        target_ori = np.where(Arr_target == target_element)
-                        #print target_ori1
-                        if len(target_ori[0]) == 1:
-                            target_ori1 = target_ori[0][0]
-                            diff_ori.append(int(target_ori1))
-                            ori_list.append(Arr_target[target_ori1])
-                            Arr_source_temp.append(m)
-                        elif len(target_ori[0]) > 1:
-                            for k in xrange(len(target_ori)):
-                                target_ori1 = target_ori[0][k]
-                                diff_ori.append(int(target_ori1))
-                                if Arr_target[target_ori1][3] == 1:
-                                    ori_list.append(Arr_target[target_ori1])
-                                    Arr_source_temp.append(m)
-                                else:
-                                    pass
-                        else:
-                            print "Can't find value from file target"
-                    else:
-                        pass
-    return Arr_source_temp, ori_list
+        matrix_ele_arr = np.where((Arr_target[:,0]>=m[0]-0.05) & (Arr_target[:,0]<=m[0]+0.05))
+        if len(matrix_ele_arr[0]) >= 1:
+            matrix_ele = (int(matrix_ele_arr[0][i]) for i in xrange(len(matrix_ele_arr[0])))
+            global matrix_temp
+            matrix_temp = []
+            for s in matrix_ele:
+                matrix_temp.append([m[0] - Arr_target[s][0], s])
+            get_min_abs(matrix_temp)
+            if abs(minele) <= 0.05:
+                ori_list.append(Arr_target[matrix_index])
+                Arr_source_temp.append(m)
+    return Arr_source_temp,ori_list
+#timestamp_com(os.getcwd()+'/ego_tar_pos_vel.csv', os.getcwd()+'/matrix_obs_vehicle.csv')
+#np.savetxt('ori_list.csv', np.array(ori_list), delimiter = ',')
+#np.savetxt('Arr_source_temp.csv', np.array(Arr_source_temp), delimiter = ',')

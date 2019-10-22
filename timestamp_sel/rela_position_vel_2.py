@@ -6,8 +6,8 @@
 #   Date    :   19/09/19 18:01:24
 #   Desc    :   
 
-import numpy as np
 from time import time
+import numpy as np
 
 t = time()
 
